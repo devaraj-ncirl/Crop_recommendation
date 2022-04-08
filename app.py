@@ -11,7 +11,7 @@ import pickle
 import io
 
 from PIL import Image
-from utils.model import ResNet9
+
 # ==============================================================================================
 
 # -------------------------LOADING THE TRAINED MODELS -----------------------------------------------
@@ -66,7 +66,7 @@ disease_classes = ['Apple___Apple_scab',
 
 # Loading crop recommendation model
 
-crop_recommendation_model_path = 'models/RandomForest.pkl'
+crop_recommendation_model_path = 'Crop_recommendation/models/RandomForest.pkl'
 crop_recommendation_model = pickle.load(
     open(crop_recommendation_model_path, 'rb'))
 
