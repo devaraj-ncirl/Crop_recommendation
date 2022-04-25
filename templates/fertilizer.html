@@ -8,7 +8,7 @@
 <!--Form Section-->
 <br /><br />
 <h2 style="text-align: center; margin: 0px; color: black">
-  <b>Get informed advice on fertilizer based on soil</b>
+  <b>Information on Yield Prediction for Selected Crop</b>
 </h2>
 <br />
 
@@ -22,42 +22,45 @@
     padding: 10px 10px;
   "
 >
-  <form method="POST" action="{{ url_for('fert_recommend') }}">
+  <form method="POST" action="{{ url_for('yield_prediction') }}">
     <div class="form-group">
-      <label for="Nitrogen" style="font-size: 17px"><b>Nitrogen</b></label>
+      <label for="average_rain_fall_mm_per_year" style="font-size: 17px"><b>Average Rain fall MM Per Year</b></label>
       <input
         type="number"
+        step="0.01"
         class="form-control"
-        id="Nitrogen"
-        name="nitrogen"
-        placeholder="Enter the value (example:50)"
+        id="rainfall"
+        name="rainfall"
+        placeholder="Enter the value (example:1485)"
         style="font-weight: bold"
         required
       />
     </div>
     <div class="form-group">
-      <label for="Phosphorous" style="font-size: 17px"
-        ><b>Phosphorous</b></label
+      <label for="avg_temp" style="font-size: 17px"
+        ><b>Average Temperature</b></label
       >
       <input
         type="number"
+        step="0.01"
         class="form-control"
-        id="Phosphorous"
-        name="phosphorous"
-        placeholder="Enter the value (example:50)"
+        id="avg_temp"
+        name="avg_temp"
+        placeholder="Enter the value (example:16.37)"
         style="font-weight: bold"
         required
       />
     </div>
 
     <div class="form-group">
-      <label for="Pottasium" style="font-size: 17px"><b>Pottasium</b></label>
+      <label for="pesticides" style="font-size: 17px"><b>Pesticides Required in Tonnes</b></label>
       <input
         type="number"
+        step="0.01"
         class="form-control"
-        id="Pottasium"
-        name="pottasium"
-        placeholder="Enter the value (example:50)"
+        id="pesticides"
+        name="pesticides"
+        placeholder="Enter the value (example:121)"
         style="font-weight: bold"
         required
       />
@@ -74,32 +77,135 @@
         style="font-weight: bold"
         required
       >
-        <option selected>Select crop</option>
-        <option>rice</option>
-        <option>maize</option>
-        <option>chickpea</option>
-        <option>kidneybeans</option>
-        <option>pigeonpeas</option>
-        <option>mothbeans</option>
-        <option>mungbean</option>
-        <option>blackgram</option>
-        <option>lentil</option>
-        <option>pomegranate</option>
-        <option>banana</option>
-        <option>mango</option>
-        <option>grapes</option>
-        <option>watermelon</option>
-        <option>muskmelon</option>
-        <option>apple</option>
-        <option>orange</option>
-        <option>papaya</option>
-        <option>coconut</option>
-        <option>cotton</option>
-        <option>jute</option>
-        <option>coffee</option>
+        <option selected>Select Crop</option>
+        <option>Rice, paddy</option>
+        <option>Maize</option>
+        <option>Potatoes</option>
+        <option>Soybeans</option>
+        <option>Wheat</option>
+        <option>Sweet potatoes</option>
+        <option>Sorghum</option>
+        <option>Plantains and others</option>
+        <option>Yams</option>
       </select>
     </div>
 
+      <div class="form-group">
+          <label for="country" style="font-size: 17px"
+          ><b>Choose country</b></label
+          >
+          <select
+                  name="countryname"
+                  class="form-control"
+                  id="countryname"
+                  placeholder="Select a country"
+                  style="font-weight: bold"
+                  required
+          >
+              <option selected>Select Country</option>
+              <option>	Albania	</option>
+              <option>	Algeria	</option>
+              <option>	Angola	</option>
+              <option>	Argentina	</option>
+              <option>	Armenia	</option>
+              <option>	Australia	</option>
+              <option>	Austria	</option>
+              <option>	Azerbaijan	</option>
+              <option>	Bahamas	</option>
+              <option>	Bahrain	</option>
+              <option>	Bangladesh	</option>
+              <option>	Belarus	</option>
+              <option>	Belgium	</option>
+              <option>	Botswana	</option>
+              <option>	Brazil	</option>
+              <option>	Bulgaria	</option>
+              <option>	Burkina Faso	</option>
+              <option>	Burundi	</option>
+              <option>	Cameroon	</option>
+              <option>	Canada	</option>
+              <option>	Central African Republic	</option>
+              <option>	Chile	</option>
+              <option>	Colombia	</option>
+              <option>	Croatia	</option>
+              <option>	Denmark	</option>
+              <option>	Dominican Republic	</option>
+              <option>	Ecuador	</option>
+              <option>	Egypt	</option>
+              <option>	El Salvador	</option>
+              <option>	Eritrea	</option>
+              <option>	Estonia	</option>
+              <option>	Finland	</option>
+              <option>	France	</option>
+              <option>	Germany	</option>
+              <option>	Ghana	</option>
+              <option>	Greece	</option>
+              <option>	Guatemala	</option>
+              <option>	Guinea	</option>
+              <option>	Guyana	</option>
+              <option>	Haiti	</option>
+              <option>	Honduras	</option>
+              <option>	Hungary	</option>
+              <option>	India	</option>
+              <option>	Indonesia	</option>
+              <option>	Iraq	</option>
+              <option>	Ireland	</option>
+              <option>	Italy	</option>
+              <option>	Jamaica	</option>
+              <option>	Japan	</option>
+              <option>	Kazakhstan	</option>
+              <option>	Kenya	</option>
+              <option>	Latvia	</option>
+              <option>	Lebanon	</option>
+              <option>	Lesotho	</option>
+              <option>	Libya	</option>
+              <option>	Lithuania	</option>
+              <option>	Madagascar	</option>
+              <option>	Malawi	</option>
+              <option>	Malaysia	</option>
+              <option>	Mali	</option>
+              <option>	Mauritania	</option>
+              <option>	Mauritius	</option>
+              <option>	Mexico	</option>
+              <option>	Montenegro	</option>
+              <option>	Morocco	</option>
+              <option>	Mozambique	</option>
+              <option>	Namibia	</option>
+              <option>	Nepal	</option>
+              <option>	Netherlands	</option>
+              <option>	New Zealand	</option>
+              <option>	Nicaragua	</option>
+              <option>	Niger	</option>
+              <option>	Norway	</option>
+              <option>	Pakistan	</option>
+              <option>	Papua New Guinea	</option>
+              <option>	Peru	</option>
+              <option>	Poland	</option>
+              <option>	Portugal	</option>
+              <option>	Qatar	</option>
+              <option>	Romania	</option>
+              <option>	Rwanda	</option>
+              <option>	Saudi Arabia	</option>
+              <option>	Senegal	</option>
+              <option>	Slovenia	</option>
+              <option>	South Africa	</option>
+              <option>	Spain	</option>
+              <option>	Sri Lanka	</option>
+              <option>	Sudan	</option>
+              <option>	Suriname	</option>
+              <option>	Sweden	</option>
+              <option>	Switzerland	</option>
+              <option>	Tajikistan	</option>
+              <option>	Thailand	</option>
+              <option>	Tunisia	</option>
+              <option>	Turkey	</option>
+              <option>	Uganda	</option>
+              <option>	Ukraine	</option>
+              <option>	United Kingdom	</option>
+              <option>	Uruguay	</option>
+              <option>	Zambia	</option>
+              <option>	Zimbabwe	</option>
+          </select>
+      </div>
     <div class="d-flex justify-content-center">
       <button
         type="submit"

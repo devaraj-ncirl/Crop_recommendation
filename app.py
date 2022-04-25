@@ -1,18 +1,23 @@
 # Importing essential libraries and modules
 
-from flask import Flask, render_template, request, Markup
+import pickle
+
 import numpy as np
 import pandas as pd
-from utils.fertilizer import fertilizer_dic
 import requests
+from flask import Flask, render_template, request
+
 import config
-import pickle
 
 # Loading crop recommendation model
 
 crop_recommendation_model_path = 'models/RandomForest.pkl'
 crop_recommendation_model = pickle.load(
     open(crop_recommendation_model_path, 'rb'))
+
+crop_yeild_pridiction_path = 'models/DecisionTree.pkl'
+crop_yeild_pridiction_model = pickle.load(
+    open(crop_yeild_pridiction_path, 'rb'))
 
 
 # =========================================================================================
@@ -49,31 +54,26 @@ def weather_fetch(city_name):
 
 app = Flask(__name__)
 
+
 # render home page
 
-
-@ app.route('/')
+@app.route('/')
 def home():
-    title = 'Harvestify - Home'
+    title = 'Home'
     return render_template('index.html', title=title)
 
-# render crop recommendation form page
 
-
-@ app.route('/crop-recommend')
+@app.route('/crop-recommend')
 def crop_recommend():
-    title = 'Harvestify - Crop Recommendation'
+    title = 'Crop Recommendation'
     return render_template('crop.html', title=title)
 
-# render fertilizer recommendation form page
 
-
-@ app.route('/fertilizer')
+@app.route('/fertilizer')
 def fertilizer_recommendation():
-    title = 'Harvestify - Fertilizer Suggestion'
+    title = 'Crop-yield Prediction'
 
     return render_template('fertilizer.html', title=title)
-
 
 
 # ===============================================================================================
@@ -83,9 +83,9 @@ def fertilizer_recommendation():
 # render crop recommendation result page
 
 
-@ app.route('/crop-predict', methods=['POST'])
+@app.route('/crop-predict', methods=['POST'])
 def crop_prediction():
-    title = 'Harvestify - Crop Recommendation'
+    title = 'Crop Recommendation'
 
     if request.method == 'POST':
         N = int(request.form['nitrogen'])
@@ -109,49 +109,36 @@ def crop_prediction():
 
             return render_template('try_again.html', title=title)
 
-# render fertilizer recommendation result page
 
+@app.route('/yield-predict', methods=['POST'])
+def yield_prediction():
+    title = 'Yield_prediction'
 
-@ app.route('/fertilizer-predict', methods=['POST'])
-def fert_recommend():
-    title = 'Harvestify - Fertilizer Suggestion'
+    if request.method == 'POST':
+        crop_name = str(request.form['cropname'])
+        country_name = str(request.form['countryname'])
+        rainfall = float(request.form['rainfall'])
+        pesticide = float(request.form['pesticides'])
+        temp = float(request.form['avg_temp'])
 
-    crop_name = str(request.form['cropname'])
-    N = int(request.form['nitrogen'])
-    P = int(request.form['phosphorous'])
-    K = int(request.form['pottasium'])
-    # ph = float(request.form['ph'])
+        yield_df = pd.read_csv('Data/yield_df.csv')
 
-    df = pd.read_csv('Data/fertilizer.csv')
+        yield_df1 = yield_df[yield_df.Area == country_name]
 
-    nr = df[df['Crop'] == crop_name]['N'].iloc[0]
-    pr = df[df['Crop'] == crop_name]['P'].iloc[0]
-    kr = df[df['Crop'] == crop_name]['K'].iloc[0]
+        final_data = yield_df1[yield_df1.Item == crop_name]
 
-    n = nr - N
-    p = pr - P
-    k = kr - K
-    temp = {abs(n): "N", abs(p): "P", abs(k): "K"}
-    max_value = temp[max(temp.keys())]
-    if max_value == "N":
-        if n < 0:
-            key = 'NHigh'
-        else:
-            key = "Nlow"
-    elif max_value == "P":
-        if p < 0:
-            key = 'PHigh'
-        else:
-            key = "Plow"
-    else:
-        if k < 0:
-            key = 'KHigh'
-        else:
-            key = "Klow"
+        # data_after_one_hot_encode = pd.get_dummies(final_data, columns=['Area', "Item"], prefix=['Country', "Item"])
+        # features = data_after_one_hot_encode.loc[:, data_after_one_hot_encode.columns != 'hg/ha_yield']
+        # features = features.drop(['Year'], axis=1)
+        #
+        # # data = np.array([[crop_name, country_name, rainfall, pesticide, temp]])
+        # my_prediction = crop_yeild_pridiction_model.predict(features[1:2])
 
-    response = Markup(str(fertilizer_dic[key]))
+        my_prediction = final_data['hg/ha_yield'].iloc[0]
+        final_prediction =my_prediction
 
-    return render_template('fertilizer-result.html', recommendation=response, title=title)
+        return render_template('fertilizer-result.html',prediction=final_prediction, title=title)
+
 
 # ===============================================================================================
 if __name__ == '__main__':
