@@ -69,6 +69,12 @@ def crop_recommend():
     return render_template('crop.html', title=title)
 
 
+@app.route('/working')
+def working():
+    title = 'Working-Procedure'
+    return render_template('working-procedure.html', title=title)
+
+
 @app.route('/fertilizer')
 def fertilizer_recommendation():
     title = 'Crop-yield Prediction'
@@ -93,21 +99,15 @@ def crop_prediction():
         K = int(request.form['pottasium'])
         ph = float(request.form['ph'])
         rainfall = float(request.form['rainfall'])
+        temperature= float(request.form['temperature'])
+        humidity = float(request.form['humidity'])
 
-        # state = request.form.get("stt")
-        city = request.form.get("city")
 
-        if weather_fetch(city) != None:
-            temperature, humidity = weather_fetch(city)
-            data = np.array([[N, P, K, temperature, humidity, ph, rainfall]])
-            my_prediction = crop_recommendation_model.predict(data)
-            final_prediction = my_prediction[0]
 
-            return render_template('crop-result.html', prediction=final_prediction, title=title)
-
-        else:
-
-            return render_template('try_again.html', title=title)
+        data = np.array([[N, P, K, temperature, humidity, ph, rainfall]])
+        my_prediction = crop_recommendation_model.predict(data)
+        final_prediction = my_prediction[0]
+        return render_template('crop-result.html', prediction=final_prediction, title=title)
 
 
 @app.route('/yield-predict', methods=['POST'])
@@ -135,9 +135,9 @@ def yield_prediction():
         # my_prediction = crop_yeild_pridiction_model.predict(features[1:2])
 
         my_prediction = final_data['hg/ha_yield'].iloc[0]
-        final_prediction =my_prediction
+        final_prediction = my_prediction
 
-        return render_template('fertilizer-result.html',prediction=final_prediction, title=title)
+        return render_template('fertilizer-result.html', prediction=final_prediction, title=title)
 
 
 # ===============================================================================================
